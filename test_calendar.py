@@ -97,13 +97,13 @@ class TestChessCalendarGenerator:
         mock_events = [
             {
                 "title": "Austin Chess Championship",
-                "date": "2024-02-15",
+                "start_date": "2024-02-15",
                 "time": "10:00",
                 "location": "Austin Chess Club"
             },
             {
                 "title": "Spring Tournament",
-                "date": "2024-03-20",
+                "start_date": "2024-03-20",
                 "time": "14:00",
                 "location": "Community Center"
             }
@@ -127,13 +127,13 @@ class TestChessCalendarGenerator:
         
         assert len(result) == 2
         assert result[0]["title"] == "Austin Chess Championship"
-        assert result[1]["date"] == "2024-03-20"
+        assert result[1]["start_date"] == "2024-03-20"
         mock_post.assert_called_once()
     
     @patch('generate_calendar.requests.post')
     def test_call_llm_with_retry_json_cleanup(self, mock_post):
         """Test LLM response cleanup (removing markdown code blocks)."""
-        mock_events = [{"title": "Test Event", "date": "2024-01-01"}]
+        mock_events = [{"title": "Test Event", "start_date": "2024-01-01"}]
         
         mock_response = Mock()
         mock_response.json.return_value = {
@@ -172,14 +172,14 @@ class TestChessCalendarGenerator:
         events_data = [
             {
                 "title": "Austin Chess Championship",
-                "date": "2024-02-15",
+                "start_date": "2024-02-15",
                 "time": "10:00",
                 "location": "Austin Chess Club",
                 "description": "Annual championship tournament"
             },
             {
                 "title": "Spring Tournament",
-                "date": "2024-03-20",
+                "start_date": "2024-03-20",
                 "time": "14:00",
                 "location": "Community Center"
             }
@@ -211,18 +211,101 @@ class TestChessCalendarGenerator:
                 
             finally:
                 self.generator.output_file = original_output
-    
+
+    def test_generate_ics_calendar_multiday_events(self):
+        """Test ICS calendar generation with multi-day events."""
+        events_data = [
+            {
+                "title": "Chess Summer Camp",
+                "start_date": "2024-07-15",
+                "end_date": "2024-07-19",
+                "location": "Austin Chess Academy",
+                "description": "5-day intensive chess camp"
+            },
+            {
+                "title": "Weekend Tournament",
+                "start_date": "2024-08-10",
+                "end_date": "2024-08-11",
+                "location": "Community Center"
+            },
+            {
+                "title": "Single Day Event",
+                "start_date": "2024-09-05",
+                "time": "14:00",
+                "location": "Chess Club"
+            }
+        ]
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            original_output = self.generator.output_file
+            self.generator.output_file = os.path.join(temp_dir, "test_multiday_calendar.ics")
+
+            try:
+                result = self.generator.generate_ics_calendar(events_data)
+
+                assert os.path.exists(result)
+
+                # Read and verify calendar content
+                with open(result, 'r', encoding='utf-8') as f:
+                    content = f.read()
+
+                assert "BEGIN:VCALENDAR" in content
+                assert "Chess Summer Camp" in content
+                assert "Weekend Tournament" in content
+                assert "Single Day Event" in content
+
+                # Count events
+                event_count = content.count("BEGIN:VEVENT")
+                assert event_count == 3
+
+                # Check for all-day events (multi-day events should not have times)
+                lines = content.split('\n')
+                camp_start_line = None
+                weekend_start_line = None
+                single_start_line = None
+
+                for i, line in enumerate(lines):
+                    if "Chess Summer Camp" in line:
+                        # Look for DTSTART in nearby lines
+                        for j in range(max(0, i-10), min(len(lines), i+10)):
+                            if lines[j].startswith("DTSTART"):
+                                camp_start_line = lines[j]
+                                break
+                    elif "Weekend Tournament" in line:
+                        for j in range(max(0, i-10), min(len(lines), i+10)):
+                            if lines[j].startswith("DTSTART"):
+                                weekend_start_line = lines[j]
+                                break
+                    elif "Single Day Event" in line:
+                        for j in range(max(0, i-10), min(len(lines), i+10)):
+                            if lines[j].startswith("DTSTART"):
+                                single_start_line = lines[j]
+                                break
+
+                # Multi-day events should be all-day (VALUE=DATE format)
+                if camp_start_line:
+                    assert "VALUE=DATE" in camp_start_line
+                if weekend_start_line:
+                    assert "VALUE=DATE" in weekend_start_line
+
+                # Single-day event should have time (no VALUE=DATE)
+                if single_start_line:
+                    assert "VALUE=DATE" not in single_start_line
+
+            finally:
+                self.generator.output_file = original_output
+
     def test_generate_ics_calendar_invalid_event(self):
         """Test ICS generation with invalid event data."""
         events_data = [
             {
                 "title": "Valid Event",
-                "date": "2024-02-15",
+                "start_date": "2024-02-15",
                 "time": "10:00"
             },
             {
                 "title": "Invalid Event",
-                "date": "invalid-date",  # Invalid date format
+                "start_date": "invalid-date",  # Invalid date format
                 "time": "25:00"  # Invalid time
             }
         ]
@@ -256,7 +339,7 @@ class TestChessCalendarGenerator:
         """Test successful end-to-end execution."""
         # Mock the pipeline
         mock_scrape.return_value = "Raw event text"
-        mock_llm.return_value = [{"title": "Test Event", "date": "2024-01-01"}]
+        mock_llm.return_value = [{"title": "Test Event", "start_date": "2024-01-01"}]
         mock_generate.return_value = "calendar.ics"
         
         result = self.generator.run()

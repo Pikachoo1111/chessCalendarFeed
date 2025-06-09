@@ -33,13 +33,22 @@ EVENT_SELECTORS = [
 
 # LLM prompt template
 LLM_PROMPT_TEMPLATE = """
-Please convert the following chess tournament events text into a JSON array. 
+Please convert the following chess tournament events text into a JSON array.
 Each event should have these fields:
 - title (required): The tournament name
-- date (required): Date in YYYY-MM-DD format
-- time (optional): Time in HH:MM format (24-hour)
+- start_date (required): Start date in YYYY-MM-DD format
+- end_date (optional): End date in YYYY-MM-DD format (only if event spans multiple days)
+- time (optional): Start time in HH:MM format (24-hour) for single-day events
 - location (optional): Venue or address
 - description (optional): Additional details
+
+For multi-day events (like camps, tournaments spanning several days):
+- Include both start_date and end_date
+- Do not include time (these will be all-day events)
+
+For single-day events:
+- Only include start_date
+- Optionally include time
 
 Only return valid JSON, no other text:
 

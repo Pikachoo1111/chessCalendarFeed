@@ -81,20 +81,8 @@ class ChessCalendarGenerator:
     def call_llm_with_retry(self, raw_text: str, max_retries: int = 3, delay: int = 2) -> List[Dict]:
         """Convert raw text to structured JSON using LLM with retry logic."""
         logger.info("Converting raw text to structured JSON using LLM")
-        
-        prompt = f"""
-Please convert the following chess tournament events text into a JSON array. 
-Each event should have these fields:
-- title (required): The tournament name
-- date (required): Date in YYYY-MM-DD format
-- time (optional): Time in HH:MM format (24-hour)
-- location (optional): Venue or address
-- description (optional): Additional details
 
-Only return valid JSON, no other text:
-
-{raw_text[:4000]}  # Limit text to avoid token limits
-"""
+        prompt = config.LLM_PROMPT_TEMPLATE.format(text=raw_text[:4000])
         
         for attempt in range(1, max_retries + 1):
             try:
@@ -130,12 +118,31 @@ Only return valid JSON, no other text:
                 # Validate structure
                 if not isinstance(structured_data, list):
                     raise ValueError("Response is not a JSON array")
-                
+
                 valid_events = []
                 for event in structured_data:
-                    if isinstance(event, dict) and "title" in event and "date" in event:
-                        valid_events.append(event)
-                
+                    if isinstance(event, dict) and "title" in event:
+                        # Check for either new format (start_date) or old format (date)
+                        if "start_date" in event or "date" in event:
+                            # Normalize to new format
+                            if "date" in event and "start_date" not in event:
+                                event["start_date"] = event["date"]
+                                del event["date"]
+
+                            # Validate multi-day events
+                            if "end_date" in event:
+                                try:
+                                    start = parse_date(event["start_date"]).date()
+                                    end = parse_date(event["end_date"]).date()
+                                    if end < start:
+                                        logger.warning(f"Invalid date range for event '{event['title']}': end_date before start_date")
+                                        continue
+                                except Exception as e:
+                                    logger.warning(f"Invalid date format for event '{event['title']}': {e}")
+                                    continue
+
+                            valid_events.append(event)
+
                 if not valid_events:
                     raise ValueError("No valid events found in JSON response")
                 
@@ -162,39 +169,58 @@ Only return valid JSON, no other text:
             try:
                 event = Event()
                 event.name = event_data["title"]
-                
-                # Parse date and time
-                date_str = event_data["date"]
-                time_str = event_data.get("time", "12:00")
-                
-                # Handle various date formats
+
+                # Check if this is a multi-day event
+                start_date_str = event_data["start_date"]
+                end_date_str = event_data.get("end_date")
+
+                # Parse start date
                 try:
-                    event_date = parse_date(date_str)
+                    start_date = parse_date(start_date_str)
                 except:
                     # Fallback parsing
-                    event_date = datetime.strptime(date_str, "%Y-%m-%d")
-                
-                # Combine date and time
-                if ":" in time_str:
-                    time_parts = time_str.split(":")
-                    hour = int(time_parts[0])
-                    minute = int(time_parts[1])
-                    event_datetime = event_date.replace(hour=hour, minute=minute)
+                    start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+
+                if end_date_str and end_date_str != start_date_str:
+                    # Multi-day event - make it all-day
+                    try:
+                        end_date = parse_date(end_date_str)
+                    except:
+                        end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+
+                    event.begin = start_date.date()
+                    event.end = (end_date + timedelta(days=1)).date()  # ICS all-day events are exclusive end
+                    event.make_all_day()
+
+                    logger.debug(f"Added multi-day event: {event.name} from {event.begin} to {end_date.date()}")
+
                 else:
-                    event_datetime = event_date.replace(hour=12, minute=0)
-                
-                event.begin = event_datetime
-                event.end = event_datetime + timedelta(hours=3)  # Default 3-hour duration
-                
+                    # Single-day event with optional time
+                    time_str = event_data.get("time", "12:00")
+
+                    # Combine date and time
+                    if time_str and ":" in time_str:
+                        time_parts = time_str.split(":")
+                        hour = int(time_parts[0])
+                        minute = int(time_parts[1])
+                        event_datetime = start_date.replace(hour=hour, minute=minute)
+                    else:
+                        event_datetime = start_date.replace(hour=12, minute=0)
+
+                    event.begin = event_datetime
+                    event.end = event_datetime + timedelta(hours=config.DEFAULT_EVENT_DURATION_HOURS)
+
+                    logger.debug(f"Added single-day event: {event.name} on {event.begin}")
+
+                # Add optional fields
                 if "location" in event_data:
                     event.location = event_data["location"]
-                
+
                 if "description" in event_data:
                     event.description = event_data["description"]
-                
+
                 calendar.events.add(event)
-                logger.debug(f"Added event: {event.name} on {event.begin}")
-                
+
             except Exception as e:
                 logger.warning(f"Failed to process event {event_data.get('title', 'Unknown')}: {e}")
                 continue

@@ -6,6 +6,7 @@ Automated calendar feed for chess tournaments from [AustinChessTournaments.com](
 
 - **🕷️ Web Scraping**: Automatically extracts tournament data from the source website
 - **🧠 AI Processing**: Uses LLM to convert unstructured text into structured calendar events
+- **📅 Multi-Day Event Support**: Automatically detects and properly formats camps, tournaments spanning multiple days
 - **📅 ICS Generation**: Creates standard iCalendar files compatible with all major calendar apps
 - **🔄 Auto-Updates**: Daily refresh via GitHub Actions
 - **📱 Apple Calendar**: Direct subscription support with automatic sync
@@ -84,6 +85,28 @@ graph TD
 │       └── update-calendar.yml  # GitHub Actions workflow
 ├── test_calendar.py         # Unit tests
 └── README.md               # This file
+```
+
+## 🗓️ Multi-Day Event Support
+
+The system automatically detects and properly formats multi-day events:
+
+### **Event Types Supported:**
+- **📚 Chess Camps**: Week-long camps appear as all-day events spanning multiple days
+- **🏆 Multi-Day Tournaments**: Tournaments spanning several days are properly formatted
+- **📅 Single-Day Events**: Regular tournaments with specific start/end times
+
+### **How It Works:**
+1. **LLM Detection**: AI analyzes event descriptions to identify multi-day events
+2. **Smart Formatting**:
+   - Multi-day events → All-day calendar entries
+   - Single-day events → Timed entries with 3-hour duration
+3. **Calendar Display**: Events appear correctly in Apple Calendar and other apps
+
+### **Example Output:**
+```
+Chess Summer Camp (July 7-11) → All-day event spanning 5 days
+Austin Open Tournament (Aug 15) → 12:00 PM - 3:00 PM single day
 ```
 
 ## 🧪 Testing
