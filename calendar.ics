@@ -2,72 +2,34 @@ BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:Chess Tournament Calendar Feed
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250721
-DTEND;VALUE=DATE:20250727
-DESCRIPTION:A full-day\, week-long chess camp\, taught by Certified National Master Paul Chaplin. All scholastic players are invited to register!
-LOCATION:Cedar Park Mathnasium
-SUMMARY:Mathnasium Summer Chess Camp #4 - Turbochess!
-UID:d6032490-207c-4cfa-a0e2-a050ade6ff1b@d603.org
+DTSTART;VALUE=DATE:20251017
+DTEND;VALUE=DATE:20251021
+DESCRIPTION:USCF rated\, 6SS championship chess tournament in 13 sections! Organized by the Dallas Chess Club.
+LOCATION:Houston
+SUMMARY:2025 Texas State Grade Championships - North/Central
+UID:742fd442-377b-4e24-aab9-13be65de8849@742f.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20250712
-DTEND;VALUE=DATE:20250715
-DESCRIPTION:SMTX Chess Club’s 2nd 2-day USCF rated classical tournament. Cash prizes\, trophies\, free snacks - NO ENTRY FEE
-SUMMARY:SMTX Chess Summer Classical Championship
-UID:9b4864e6-0a84-403c-a2e4-810c7cece6ec@9b48.org
+DTEND;VALUE=DATE:20250804
+DESCRIPTION:This Austin Chess Club G/90 inc30 4 round swiss takes place over 4 weeks\, with games on July 12th\, 19th\, 26th\, and August 2nd. Sections dependent on turnout. EF: $20.00 all
+SUMMARY:ACC USCF G/90 Standard Swiss
+UID:b0bfe7ff-6f31-432c-88fa-7b215444e07f@b0bf.org
 END:VEVENT
 BEGIN:VEVENT
-DESCRIPTION:Scholastic chess tournament in multiple sections.
+DESCRIPTION:Scholastic chess tournament in multiple sections
 DTEND:20250823T150000Z
 LOCATION:Cedar Park Public Library
 DTSTART:20250823T120000Z
 SUMMARY:Cedar Park August2025 Scholastic Tournament
-UID:427cd8cb-4fda-4a68-9011-70efeba332ca@427c.org
-END:VEVENT
-BEGIN:VEVENT
-DESCRIPTION:In-Person USCF Rated Open Tournament hosted by the Austin Grandmaster Chess Academy. Capacity: 92 players!
-DTEND:20250726T150000Z
-DTSTART:20250726T120000Z
-SUMMARY:AGCA Summer Open #2
-UID:9a9ea7e7-1f00-4b1e-af29-df1db5ea4d58@9a9e.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250804
-DTEND;VALUE=DATE:20250810
-DESCRIPTION:A full-day\, week-long chess camp\, taught by Certified National Master Paul Chaplin. All scholastic players are invited to register!
-LOCATION:Cedar Park Mathnasium
-SUMMARY:Mathnasium Summer Chess Camp #5 - Fantastic Finales!
-UID:bf640028-c937-40bb-9c17-83f2f9e2465c@bf64.org
-END:VEVENT
-BEGIN:VEVENT
-DESCRIPTION:A one-day 4SS G/24 +5. Sections dependent on turnout. USCF membership required.
-DTEND:20250823T150000Z
-DTSTART:20250823T120000Z
-SUMMARY:ACC USCF Quick-rated G/24 Swiss
-UID:c2fe499d-c674-43b8-9839-d2dafb29ecea@c2fe.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250804
-DTEND;VALUE=DATE:20250810
-DESCRIPTION:A full day\, week long chess camp. All scholastic players are invited to register.
-LOCATION:Austin Grandmaster Chess Academy
-SUMMARY:AGCA Summer Camp4 –2025
-UID:5b55d1c1-9ada-4ab4-a534-b7c866c99280@5b55.org
+UID:057aa268-6d5a-4c61-afc8-e6796075cc8d@057a.org
 END:VEVENT
 BEGIN:VEVENT
 DESCRIPTION:USCF Rated 4SS in 3 sections\; G/45\, d5. All abilities. Limited to 60 players!
 DTEND:20250809T150000Z
 DTSTART:20250809T120000Z
 SUMMARY:Waco August9 Swiss
-UID:bcbc7d18-d939-479b-b4df-0bad3d07dd7d@bcbc.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20251017
-DTEND;VALUE=DATE:20251021
-DESCRIPTION:USCF rated\, 6SS championship chess tournament in 13 sections! Organized by the Dallas Chess Club.
-LOCATION:Houston
-SUMMARY:2025 Texas State Grade Championships - North/Central
-UID:5c4d400b-591e-4107-baf8-0ca6996f80b2@5c4d.org
+UID:7dd17bcd-ae5b-4c3a-98d6-84cb5f2912c2@7dd1.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20250714
@@ -75,20 +37,51 @@ DTEND;VALUE=DATE:20250720
 DESCRIPTION:A full day\, week-long chess camp hosted by NYOS Charter School. Open to all scholastic chess players\, and is run by Mr. Gary Gaiffe.
 LOCATION:NYOS Charter School\, north side of Austin
 SUMMARY:2025 NYOS Summer Chess Camp
-UID:678c6b3f-b108-4aa3-be63-d0ea9f9cca55@678c.org
+UID:a3a3f135-0e90-43ed-9046-5c29429ce175@a3a3.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250804
+DTEND;VALUE=DATE:20250810
+DESCRIPTION:A full-day\, week-long chess camp\, taught by Certified National Master Paul Chaplin. All scholastic players are invited to register!
+LOCATION:Cedar Park Mathnasium
+SUMMARY:Mathnasium Summer Chess Camp #5 - Fantastic Finales!
+UID:ef9d7f5a-7dff-4cfc-9bc9-026f824dfb57@ef9d.org
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:In-Person USCF Rated Open Tournament hosted by the Austin Grandmaster Chess Academy. Capacity: 92 players!
+DTEND:20250726T150000Z
+DTSTART:20250726T120000Z
+SUMMARY:AGCA Summer Open #2
+UID:56a5c8b2-4dca-4869-ab12-2e782bc8c8fd@56a5.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250804
+DTEND;VALUE=DATE:20250810
+DESCRIPTION:A full day\, week long chess camp. All scholastic players are invited to register.
+LOCATION:Austin Grandmaster Chess Academy
+SUMMARY:AGCA Summer Camp4 –2025
+UID:9d0aba92-168f-428e-8d22-3cf83b39ff40@9d0a.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250721
+DTEND;VALUE=DATE:20250727
+DESCRIPTION:A full-day\, week-long chess camp\, taught by Certified National Master Paul Chaplin. All scholastic players are invited to register!
+LOCATION:Cedar Park Mathnasium
+SUMMARY:Mathnasium Summer Chess Camp #4 - Turbochess!
+UID:d215e8a7-21a8-4575-8f50-f8c6748c551a@d215.org
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:A one-day 4SS G/24 +5 at the Austin Chess Club. Sections dependent on turnout. USCF membership required.
+DTEND:20250823T150000Z
+DTSTART:20250823T120000Z
+SUMMARY:ACC USCF Quick-rated G/24 Swiss
+UID:8d9110fe-8806-40da-9ee2-0e5f1a968f79@8d91.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20250815
 DTEND;VALUE=DATE:20250819
-DESCRIPTION:Annual 5 round USCF rated swiss chess tournament in 5 sections (2 schedules). $6000+ in guaranteed prizes!
+DESCRIPTION:Annual 5 round USCF rated swiss chess tournament in 5 sections (2 schedules)\, sponsored by the Austin Chess Club. $6000+ in guaranteed prizes!
 SUMMARY:2025 Austin Summer Open
-UID:e9b9ad9c-6bb3-4da9-ad75-616548172abd@e9b9.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250712
-DTEND;VALUE=DATE:20250804
-DESCRIPTION:This Austin Chess Club G/90 inc30 4 round swiss takes place over 4 weeks\, with games on July 12th\, 19th\, 26th\, and August 2nd. Sections dependent on turnout. EF: $20.00 all
-SUMMARY:ACC USCF G/90 Standard Swiss
-UID:bcd29b5d-0141-41c4-9add-7023a2046c31@bcd2.org
+UID:b11a259f-d9cf-40e4-99f4-4136b66cc5e6@b11a.org
 END:VEVENT
 END:VCALENDAR
